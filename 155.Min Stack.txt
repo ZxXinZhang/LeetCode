@@ -1,0 +1,53 @@
+//Using two stacks. One is used to store value. The other is used to store the current min value.
+
+import java.util.*;
+public class MinStack {
+        Deque<Integer> stackval; 
+        Deque<Integer> stackmin; 
+    /** initialize your data structure here. */
+    public MinStack() {
+        this.stackval = new ArrayDeque<Integer>();
+        this.stackmin = new ArrayDeque<Integer>();
+    }
+    
+    public void push(int x) {
+        this.stackval.offerLast(x);
+        
+        if(!this.stackmin.isEmpty()){
+            int temp = this.stackmin.peekLast();
+        
+            if(temp <= x) { 
+                this.stackmin.offerLast(temp);
+            }else{
+                this.stackmin.offerLast(x);
+            }
+            
+        }else{
+            this.stackmin.offerLast(x);        
+        }
+    }
+    
+    public void pop() {
+        this.stackval.pollLast();
+        this.stackmin.pollLast();
+    }
+    
+    public int top() {
+        return this.stackval.peekLast();
+    }
+    
+    public int getMin() {
+        if(!stackmin.isEmpty())
+            return this.stackmin.peekLast();
+        else return 0;
+    }
+}
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack obj = new MinStack();
+ * obj.push(x);
+ * obj.pop();
+ * int param_3 = obj.top();
+ * int param_4 = obj.getMin();
+ */

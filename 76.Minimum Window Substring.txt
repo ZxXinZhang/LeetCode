@@ -1,0 +1,97 @@
+/*
+//Using a HashMap to store the frequences of the elements in the window. The value means how many the key character we need to cover futher.
+//Corner case: S"abc", T"aa", return "".
+//Using a "count" variable to count if the current window covers all the characters in the string T.
+
+public class Solution {
+	public String minWindow(String s, String t) {
+		if(s == null || t == null || s.length() == 0 || t.length() ==0)
+			return null;
+		int start = 0;
+		int end = 0;
+
+		HashMap<Character, Integer> freq = new HashMap<Character, Integer>();
+		
+		for(char c : t.toCharArray()){
+			Integer frequence = freq.get(c);
+			if(frequence == null) 
+				freq.put(c,1);
+			else 
+				freq.put(c,frequence+1);
+		}
+		char[] ss = s.toCharArray();
+		int count = t.length();
+		int minLength = Integer.MAX_VALUE;
+		int index = 0;
+		
+		while(end < ss.length){
+			Integer frequence = freq.get(ss[end]);
+				
+			if(frequence != null){
+				freq.put(ss[end],frequence-1);
+				if(frequence>0){
+					count--;
+				}
+			}
+			end++;
+			while(count == 0){
+				if(end-start < minLength){
+					minLength = end - start;
+					index = start;
+				}
+				Integer frequences = freq.get(ss[start]);
+				if(frequences != null){
+					freq.put(ss[start],frequences +1);
+					if(frequences == 0)
+						count++;
+				}
+				start++;
+			}
+		}
+		return minLength == Integer.MAX_VALUE? new String():new String(ss,index,minLength);
+	}
+	
+}
+*/
+
+//Optimized version. Using int[] array to replace HashMap.
+//
+public class Solution {
+	public String minWindow(String s, String t) {
+		if(s == null || t == null || s.length() == 0 || t.length() == 0) return new String();
+		int[] map = new int[128];
+		for(int i = 0; i < t.length(); i++){
+ 		    map[t.charAt(i)]++; 		
+		    
+		}
+        
+		int startindex = 0; int end = 0; int start = 0;int min = Integer.MAX_VALUE;int count = t.length();
+		char[] c = s.toCharArray();
+		while(end < c.length){
+		    if(map[c[end]] > 0){
+		        count--;
+		    }
+		    map[c[end]]--;
+		
+		    end++;
+	
+		    while(count == 0){
+		        if(end - start < min){
+		            startindex = start;
+		            min = end - start;
+		        }
+		        
+		        if(map[c[start]] == 0){
+		            count++;
+		        }
+		        map[c[start]]++;
+		        start ++;
+		      
+		    }
+		    
+		}
+		return min == Integer.MAX_VALUE?  new String() :  new String(c, startindex, min);
+	}
+	
+}
+

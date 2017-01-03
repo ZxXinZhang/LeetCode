@@ -1,0 +1,86 @@
+/*
+
+//Sliding window. Find the max number in the first K nums. Then left++, right++. Check the the left number out of the window to see if it is the max number in the former window everytime move to right by one. There are 3 caese in total.
+//#1. if it is the max number in the former window, then we should loop all the numbers in the current window to find the max one.
+//If it is not. There are two cases. #2. If the new most right number in the new window are larger than the max number in the former window, the max number in the current window should be the new most right number. #3. If the new most right number in the new window are larger than the max number in the former window, the max number in the current window should be the same.
+public class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+       
+        if(nums.length == 0 || nums == null || k == 0) return nums;
+        int left = 0;
+        int right = left + k - 1;
+        int[] res = new int[nums.length - k + 1];
+        int max1 = Integer.MIN_VALUE;
+        for(int i = left; i <= right; i++){
+            if(nums[i] > max1){
+                max1 = nums[i];
+            }
+        }
+        res[0] = max1;
+        left++;
+        right++;
+        int s = 1; 
+        while(right < nums.length){
+            if(s >= res.length){break;}
+            int max = Integer.MIN_VALUE;
+               if(res[s - 1] == nums[left - 1]){
+                    for(int i = left; i <= right; i++){
+                        if(nums[i] > max){
+                            max = nums[i];
+                        }  
+                    }
+               }else if(res[s - 1] <= nums[right]){
+                   max = nums[right];
+               }else{
+                   max = res[s - 1];
+               }
+               res[s] = max;
+               
+               left++;
+               right++;
+               s++;
+            }
+            
+        return res;
+
+    }
+}
+
+*/
+
+//We scan the array from 0 to n-1, keep "promising" elements in the deque. The algorithm is amortized O(n) as each element is put and polled once.
+//At each i, we keep "promising" elements, which are potentially max number in window [i-(k-1),i] or any subsequent window. This means
+
+//1.If an element in the deque and it is out of i-(k-1), we discard them. We just need to poll from the head, as we are using a deque and elements are ordered as the sequence in the array
+
+//2.Now only those elements within [i-(k-1),i] are in the deque. We then discard elements smaller than a[i] from the tail. This is because if a[x] <a[i] and x<i, then a[x] has no chance to be the "max" in [i-(k-1),i], or any other subsequent window: a[i] would always be a better candidate.
+
+//3.As a result elements in the deque are ordered in both sequence in array and their value. At each step the head of the deque is the max element in [i-(k-1),i]
+public class Solution {
+public int[] maxSlidingWindow(int[] a, int k) {		
+		if (a == null || k <= 0) {
+			return new int[0];
+		}
+		int n = a.length;
+		int[] r = new int[n-k+1];
+		int ri = 0;
+		// store index
+		Deque<Integer> q = new ArrayDeque<>();
+		for (int i = 0; i < a.length; i++) {
+			// remove numbers out of range k
+			while (!q.isEmpty() && q.peek() < i - k + 1) {
+				q.poll();
+			}
+			// remove smaller numbers in k range as they are useless
+			while (!q.isEmpty() && a[q.peekLast()] < a[i]) {
+				q.pollLast();
+			}
+			// q contains index... r contains content
+			q.offer(i);
+			if (i >= k - 1) {
+				r[ri++] = a[q.peek()];
+			}
+		}
+		return r;
+	}
+}
