@@ -1,0 +1,29 @@
+//map: key is to store elements, and value is to store the count of each elements. add an element, just put it into map.
+//for every element in the map, we get the value from target minus it. 
+//And there are two cases, no1: if the value euqals to the cur elements, the key of this value should be large than or equal to 2 so that we can return true. no2: if the value does not euqal to the cur elements, return true only if the value is a key in the map.
+
+public class TwoSum {
+    Map<Integer,Integer> map = new HashMap<Integer,Integer>(); 
+    // Add the number to an internal data structure.
+	public void add(int number) {
+	    if(map.containsKey(number)){
+	        map.put(number, map.get(number) + 1);
+	    }else{
+	        map.put(number, 1);
+	    }
+	}
+
+    // Find if there exists any pair of numbers which sum is equal to the value.
+	public boolean find(int value) {
+	    for(Integer cur : map.keySet()){
+	        int left = value - cur;
+	        if(left == cur && map.get(cur) >= 2) return true;
+	        else if(left != cur && map.containsKey(left)){
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+}
+
+

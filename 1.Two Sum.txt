@@ -1,0 +1,18 @@
+ //put every element which has been checked into map. for every current element, we check all elements before it to see if there is an elements which add current element is equal to the target.
+public class Solution {
+public int[] twoSum(int[] numbers, int target) {
+    int[] result = new int[2];
+    Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+    for (int i = 0; i < numbers.length; i++) {
+        if (map.containsKey(target - numbers[i])) {
+            result[1] = i;
+            result[0] = map.get(target - numbers[i]);
+            return result;
+        }
+        map.put(numbers[i], i);
+    }
+    return result;
+}
+}
+
+// O(n)

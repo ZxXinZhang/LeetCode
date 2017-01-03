@@ -1,0 +1,47 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+ 
+ //First, we need a dummy head of the result list.
+ //Then, we need a "carry" variable to store the carry when two numbers digits add up to more than ten.
+ //We can make it in a loop. And we need 3 indices for three lists.
+ //Do not forget the carry in the end.
+ 
+public class Solution {
+public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+   ListNode dummyhead = new ListNode(0);
+   ListNode p = l1;
+   ListNode q = l2;
+   ListNode curr = dummyhead;
+   int x;
+   int y;
+   int sum;
+   int carry = 0;
+   while(p!=null||q!=null)
+   {
+       x = p!=null ? p.val:0;
+       y = q!=null ? q.val:0;
+       sum = x + y + carry;
+       carry = sum/10;
+       curr.next = new ListNode(sum%10);
+       curr = curr.next;
+       if(p!=null)
+       p=p.next;
+       if(q!=null)
+       q=q.next;
+   }
+   if(carry == 1)
+    {
+        curr.next = new ListNode(1);
+    }
+    return dummyhead.next;
+}
+}
+
+// O(n)
+
