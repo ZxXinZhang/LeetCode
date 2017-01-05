@@ -1,0 +1,38 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+ //Using the thought of binary search to find the largest value smaller than the target and the smallest value larger than the target. Then we can compare which one is cloest to the target.
+ //corner case : root.left == null && root.right == nul, return root.val;
+public class Solution {
+    public int closestValue(TreeNode root, double target) {
+        return find(root, target, Integer.MAX_VALUE, Integer.MIN_VALUE);
+        }
+    
+    public int find(TreeNode root, double target, int large, int small){
+        if(root.left == null && root.right == null){
+            return root.val;
+        }
+        if(target < root.val){
+            large = root.val;
+            if(root.left != null){
+                small = find(root.left, target, large, small);
+            }
+            else
+                return large;
+        }else{
+            small = root.val;
+            if(root.right != null){
+                large = find(root.right, target, large, small);
+            }
+            else
+                return small;
+        }
+        return (large - target) > (target -small) ? small : large;
+    }
+}
