@@ -1,0 +1,54 @@
+//Using topological sort.
+//Build a directed graph from the prerequisites array.
+//Do topological sort. If the we can get a topological sorted sequence whose length is euqal to the numCourses, return the sequence. Else, return an empty array.
+public class Solution {
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        int[] res = new int[numCourses];
+        ArrayList[] graph = new ArrayList[numCourses];
+        for(int i = 0; i < numCourses; i++){
+            graph[i] = new ArrayList<Integer>();
+        }
+        int[] degree = new int[numCourses];
+        for(int i = 0; i < prerequisites.length; i++){
+            int[] courses = prerequisites[i];
+            int pre = courses[1];
+            int cur = courses[0];
+            graph[pre].add(cur);
+            degree[cur] ++;
+        }
+        Queue queue = new LinkedList();
+        for(int i = 0 ; i < degree.length; i++){
+            if(degree[i] == 0){
+                queue.offer(i);
+            }
+        }
+        int count = 0;
+        while(!queue.isEmpty()){
+            int course = (int)queue.poll();
+            res[count] = course;
+            count++;
+            for(int i = 0; i < graph[course].size(); i++){
+                int pointer = (int)graph[course].get(i);
+                degree[pointer]--;
+                if(degree[pointer] == 0){
+                    queue.offer(pointer);
+                    
+                }
+            }
+        }
+
+        if(count  == numCourses){
+            
+            return res;
+        }else{
+            return new int[]{};
+        }
+               
+    }
+}
+
+
+
+
+
+

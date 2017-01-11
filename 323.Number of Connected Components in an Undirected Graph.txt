@@ -1,0 +1,80 @@
+//Doing dfs can find all the nodes connected together. So we can build a graph first, then for every node whihc is not visited to run dfs, then count how many times we run dfs till all the nodes are visited. return the count number.
+public class Solution {
+    public int countComponents(int n, int[][] edges) {
+        if(edges == null || edges.length == 0){
+            return n;
+        }
+        if(edges[0] == null || edges[0].length != 2){
+            return 0;
+        }
+        boolean[] visited = new boolean[n];
+        List<List<Integer>> list = new ArrayList<List<Integer>>();
+        for(int i = 0; i < n; i++){
+            list.add(new ArrayList<Integer>());
+        }
+        int count = 0;
+        for(int[] edge : edges){
+            int u = edge[0];
+            int v = edge[1];
+            list.get(u).add(v);
+            list.get(v).add(u);
+            
+        }
+        
+        for(int i = 0; i < n; i++){
+            if(!visited[i]){
+                dfs(i,list,visited);
+                count++;
+            }
+        }
+        return count;
+    }
+    
+    private void dfs(int i, List<List<Integer>> list, boolean[] visited){
+        visited[i] = true;
+        List<Integer> al = list.get(i);
+        for(Integer m : al){
+            if(!visited[m]){
+                dfs(m, list, visited);
+            }
+        }
+    }
+}
+//O(n)
+
+
+/*
+// Union-find solution.
+//With each edge added, check which island is e[0] or e[1] belonging to.
+//If e[0] and e[1] are in same islands, do nothing.
+//Otherwise, union two islands, and reduce islands count by 1.
+
+
+public int countComponents(int n, int[][] edges) {
+    int[] roots = new int[n];
+    for(int i = 0; i < n; i++) roots[i] = i; 
+
+    for(int[] e : edges) {
+        int root1 = find(roots, e[0]);
+        int root2 = find(roots, e[1]);
+        if(root1 != root2) {      
+            roots[root1] = root2;  // union
+            n--;
+        }
+    }
+    return n;
+}
+
+public int find(int[] roots, int id) {
+    while(roots[id] != id) {
+        roots[id] = roots[roots[id]];  // optional: path compression
+        id = roots[id];
+    }
+    return id;
+}
+
+*/
+
+
+
+

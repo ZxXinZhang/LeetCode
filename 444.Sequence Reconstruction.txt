@@ -1,0 +1,55 @@
+//build a directed graph with inderee first.
+//Then we do topological sort. During the process, if the queue size is not 1, which means the sequence is not valid or is not unique, return false. At last, we should check if the sequence we build is same as org by checking the length of them.
+public class Solution {
+    public boolean sequenceReconstruction(int[] org,  List<List<Integer>> seqs) {
+        Map<Integer, Integer> indegree = new HashMap<Integer, Integer>();
+        Map<Integer, List<Integer>> graph = new HashMap<Integer, List<Integer>>();
+        
+        for(int[] seq : seqs){
+            if(seq.length == 1){
+                if(!graph.containsKey(seq[0])){
+                    graph.put(seq[0], new ArrayList<Integer>());
+                    indegree.put(seq[0],0);
+                }
+            }else{
+                for(int i = 0 ; i < seq.length - 1; i++){
+                    if(!graph.containsKey(seq[i])){
+                        graph.put(seq[i], new ArrayList<Integer>());
+                        indegree.put(seq[i],0);
+                    }
+                    if(!graph.containsKey(seq[i + 1])){
+                        graph.put(seq[i + 1], new ArrayList<Integer>());
+                        indegree.put(seq[i + 1],0);
+                    }
+                    if(graph.get(seq[i]).add(seq[i + 1]))
+                        indegree.put(seq[i + 1],indegree.get(seq[i + 1]) + 1);
+                }
+            }
+        }
+        
+        Deque<Integer> queue = new LinkedList<Integer>();
+        for(int node : indegree.keySet()){
+            if(indegree.get(node) == 0){
+                queue.offerLast(node);
+            }
+        }
+        int index = 0;
+        while(queue.size() != 0){
+            int size = queue.size();
+            if(size > 1) return false;
+            int cur = queue.pollFirst();
+            if(index >= org.length || cur != org[index])
+                return false;
+            index++;
+            for(int next : graph.get(cur)){
+                indegree.put(next, indegree.get(next) - 1);
+                if(indegree.get(next) == 0){
+                    queue.offerLast(next);
+                }
+            }
+            
+        }
+        if(index == graph.size() && index == org.length) return true;
+        else return false;
+    }
+}

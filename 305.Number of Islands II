@@ -1,0 +1,40 @@
+//Union Find
+//We need a one dimentional array "roots" to index every island to its root. Since we should take islands adjacent horizontally and vertically as one island, otherwise, they are different islands, we should increase the count number.
+//For one new island, we check the four neiboring positions. If there exists island, we should make them belong to one root. count matains the same. If not, count++;
+public class Solution {
+    public List<Integer> numIslands2(int m, int n, int[][] positions) {
+        int[] roots = new int[m * n];
+        int count = 0;
+        Arrays.fill(roots,-1);
+        List<Integer> res = new ArrayList<Integer>();
+        if(positions == null || positions.length == 0) return res;
+        int[][] dir = new int[][]{{0,1},{1,0},{0,-1},{-1,0}};
+        for(int[] p : positions){
+            int root = p[0] * n + p[1];
+            roots[root] = root;
+            count++;
+            
+            for(int[] dirc : dir){
+                int x = p[0] + dirc[0];
+                int y = p[1] + dirc[1];
+                int nb = x * n + y;
+                if(x < 0 || x >= m || y < 0 || y >= n || roots[nb] == -1) continue;
+                int rootnb = find(roots, nb);
+                if(root != rootnb){
+                    roots[root] = rootnb;
+                    root = rootnb;
+                    count--;
+                }
+            }
+            res.add(count);
+        }
+        return res;
+    }
+    
+    private int find(int[] roots, int nb){
+        while(roots[nb] != nb){
+            nb = roots[nb];
+        }
+        return nb;
+    }
+}
