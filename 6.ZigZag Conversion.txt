@@ -1,0 +1,27 @@
+//We can find a pattern. The interval is 2 * k - 2. Strings in middle lines shoule add mid number between intervals. 
+
+public class Solution {
+    public String convert(String s, int k) {
+        if(k <= 0) return "";
+        if(k == 1 || s.length() < k) return s;
+        
+        int interval = 2 * k - 2;
+        int mid = interval;
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < k; i++)
+        {
+            for(int j = i; j < s.length(); j = j + interval)
+            {
+                sb = sb.append(s.charAt(j));
+                if(mid !=  interval && mid != 0 && (j + mid) < s.length() )
+                {
+                    sb = sb.append(s.charAt(j+mid));
+                }
+                 
+                
+            }
+            mid = mid - 2;
+        }
+        return sb.toString();
+    }
+}
