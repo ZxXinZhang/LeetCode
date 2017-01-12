@@ -1,0 +1,36 @@
+//The basic idea is to maintain two heaps: a max-heap and a min-heap. The max heap stores the smaller half of all numbers while the min heap stores the larger half. The sizes of two heaps need to be balanced each time when a new number is inserted so that their size will not be different by more than 1. Therefore each time when findMedian() is called we check if two heaps have the same size. If they do, we should return the average of the two top values of heaps. Otherwise we return the top of the heap which has one more element.
+//PriorityQueue is from small to large by default.
+//compare(Integer o1, Integer o2){return o2 - o1;}  is from larger to samll.
+//We keep the sizes of two heap same. If the total number is odd, the size of the larger heap is one more than the size of the small heap.  
+
+public class MedianFinder {
+    
+    private Queue<Integer> small = new PriorityQueue(1, new Comparator<Integer>(){
+        public int compare(Integer o1, Integer o2){
+            return o2 - o1;
+        }
+    });
+    
+    private Queue<Integer> large = new PriorityQueue(); 
+    
+    // Adds a number into the data structure.
+    public void addNum(int num) {
+        large.add(num);
+        small.add(large.poll());
+        if(large.size() < small.size()){
+            large.add(small.poll());
+        }
+    }
+
+    // Returns the median of current data stream
+    public double findMedian() {
+        return large.size() > small.size() ? large.peek() : (large.peek() + small.peek()) / 2.0;
+    }
+};
+
+// Your MedianFinder object will be instantiated and called as such:
+// MedianFinder mf = new MedianFinder();
+// mf.addNum(1);
+// mf.findMedian();
+
+

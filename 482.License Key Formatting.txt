@@ -1,0 +1,22 @@
+//Convert string to char array.
+//From the end to the start, add character one by one. Do count and turn the character to upper case and delete original dashes at the same time. Whenever the count number is equal to K, we add a dash.
+//We should handle a corner case, such as S = "2-4A0r7-4k", K = 4. check if the begining character is '-' on the condition that its length is larger than 0. In this case, we should delete the first '-'; 
+public class Solution {
+    public String licenseKeyFormatting(String S, int K) {
+        char[] array = S.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        int count = 0;
+        for(int i = S.length() - 1; i >= 0; i--){
+            if(array[i] == '-') continue;
+            sb.insert(0, Character.toUpperCase(array[i]));
+            count++;
+            if(count == K){
+                sb.insert(0,'-');
+                count = 0;
+            }
+        }
+        if(sb.length() > 0 && sb.charAt(0) == '-') sb.deleteCharAt(0);
+        return sb.toString();
+    }
+}
+//O(n)
