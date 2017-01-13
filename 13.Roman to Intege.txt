@@ -1,0 +1,45 @@
+//One character means one number. But its sign is decided by the order.
+public class Solution {
+    public int romanToInt(String s) {
+        int nums[] = new int[s.length()];
+        int n = 0;
+        int num = 0;
+        for(int i = 0 ; i < s.length() ; i++)
+        {
+            switch(s.charAt(i))
+            {
+                case'M':
+                    nums[i] = 1000;
+                    break;
+                case'D':
+                    nums[i] = 500;
+                    break;
+                case'C':
+                    nums[i] = 100;
+                    break;
+                case'L':
+                    nums[i] = 50;
+                    break;
+                case'X':
+                    nums[i] = 10;
+                    break;
+                case'V':
+                    nums[i] = 5;
+                    break;
+                case'I':
+                    nums[i] = 1;
+                    break;
+            }
+        }
+        System.out.println("shuzu" + nums[0]);
+        for(int i = 0; i < (s.length() - 1); i++)
+        {
+            if(nums[i] < nums[i + 1])
+            num = num - nums[i];
+            else
+            num = num + nums[i];
+        }
+        num = num + nums[s.length() - 1];
+        return num;
+    }
+}

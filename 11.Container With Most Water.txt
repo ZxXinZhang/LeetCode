@@ -1,0 +1,31 @@
+//We need two pointers, left and right. Move the lower one.
+public class Solution {
+    public int maxArea(int[] height) {
+        int left = 1;
+        int right = height.length;
+        int min = 0;
+        int maxarea = 0;
+        int area = 0;
+
+        while((right - left) > 0)
+        {
+            if( height[left - 1] < height[right - 1] )
+            {
+                min = height[left - 1]; 
+                area = min * (right - left);  
+                left = left + 1;
+            }
+            else
+            {
+                min = height[right - 1];
+                area = min * (right - left);  
+                right = right - 1;
+            }
+            
+            maxarea = Math.max(area, maxarea);
+        }
+        return maxarea;
+    }
+}
+
+//O(n)

@@ -1,0 +1,26 @@
+//Given numbers [2, 3, 4, 5], regarding the third number 4, the product of array except 4 is 2*3*5 which consists of two parts: left 2*3 and right 5. The product is left*right. We can calculate lefts and rights in 2 loops. 
+public class Solution {
+    public int[] productExceptSelf(int[] nums) {
+        int len = nums.length;
+        int[] res = new int[len];
+        // Calculate lefts and store in res.
+        int left = 1;
+        for(int i = 0; i < len; i++){
+            if(i > 0){
+                left *= nums[i - 1];
+            }
+            res[i] = left;
+            System.out.println(res[i]);
+        }
+        // Calculate rights and the product from the end of the array.
+        int right = 1;
+        for(int j = len - 1; j >= 0; j--){
+            if(j < len - 1){
+                right = right * nums[j + 1];
+            }
+            res[j] *= right;
+        }
+        return res;
+    }
+}
+//O(n)

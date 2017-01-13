@@ -1,0 +1,29 @@
+//Loop every character in the string. If we meet '(' '[' '{', just put them into stack. If we meet ')' ']' '}', we should check the top of the stack to see if they are match.
+public class Solution {
+    public boolean isValid(String s) {
+        if(s == null || s.length() == 0 || s.length()%2 == 1) return false;
+        Deque<Character> stack = new LinkedList<Character>();
+        stack.offerLast(s.charAt(0));
+        for(int i = 1; i < s.length(); i++){
+            char newc = s.charAt(i);
+            if(newc == '(' || newc == '{' || newc == '['){
+                stack.offerLast(newc);}
+            else{
+                char last = stack.peekLast();
+                if(last == '(' && newc == ')')
+                    stack.pollLast();
+                else if(last == '[' && newc == ']')
+                    stack.pollLast();
+                else if(last == '{' && newc == '}')
+                    stack.pollLast();
+                else
+                    return false;
+            }
+            
+        }
+        if(stack.isEmpty()) 
+            return true;
+        else return false;
+        
+    }
+}

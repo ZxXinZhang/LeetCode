@@ -1,0 +1,53 @@
+/*
+//check strs in string[] one by one.
+public class Solution {
+public String longestCommonPrefix(String[] strs) {
+    if (strs.length == 0) return "";
+    String pre = strs[0];
+    for (int i = 1; i < strs.length; i++)
+        while(strs[i].indexOf(pre) != 0)
+            pre = pre.substring(0,pre.length()-1);
+    return pre;
+}
+}
+*/
+
+
+
+//divide and conquer.
+
+public class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        if(strs == null || strs.length == 0)
+            return "";
+        else 
+            return longestCommonPrefix(strs , 0 , strs.length - 1);
+    }
+    
+    private String longestCommonPrefix(String[] strs, int l, int r)
+    {
+        if(l == r)
+            return strs[l];
+        int mid = (l + r) / 2;
+        String leftlongest = longestCommonPrefix(strs, l , mid);
+        String rightlongest = longestCommonPrefix(strs,mid + 1, r);
+        return commonPrefix(leftlongest, rightlongest);
+    }
+    
+    private String commonPrefix(String left, String right)
+    {
+        int min = Math.min(left.length(), right.length());
+        for(int i = 0; i < min; i++)
+        {
+            if(left.charAt(i) != right.charAt(i))
+                return left.substring(0,i);
+        }
+        return left.substring(0,min);
+    }
+    
+} 
+
+//O(nlogn)
+
+
+
